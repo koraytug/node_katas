@@ -1,13 +1,17 @@
+import {Coordinate} from "./coordinate";
 import {Direction} from "./direction";
+import {ICoordinate} from "./icoordinate";
 import {IDirection} from "./idirection";
 import {IMarsRover} from "./imarsRover";
 
 
 export class MarsRover implements IMarsRover {
     private direction: IDirection;
+    private coordinate: ICoordinate;
 
     public constructor() {
         this.direction = new Direction();
+        this.coordinate = new Coordinate(0, 0);
     }
 
     public execute(commands: string): string {
@@ -21,8 +25,22 @@ export class MarsRover implements IMarsRover {
                 // this.direction = this.rotateLeft();
                 this.direction.left();
             }
+
+            if (chr === "M") {
+                this.coordinate = this.move();
+            }
         });
-        return "0:0:" + this.direction.value;
+        // return "0:0:" + this.direction.value;
+        return `${this.coordinate.x()}:${this.coordinate.y()}:${this.direction.value}`;
+    }
+
+    private move(): ICoordinate {
+        let y: number = this.coordinate.y();
+        if (this.direction.value === "N") {
+            y += 1;
+        }
+
+        return new Coordinate(this.coordinate.x(), y);
     }
 
     // private rotateRight(): string {

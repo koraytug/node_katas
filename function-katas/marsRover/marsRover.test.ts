@@ -31,4 +31,14 @@ describe("", () => {
         const position = params[1];
         expect(rover.execute(commands)).toBe(position);
     });
+
+    it.each([
+        "M,0:1:N",
+        "MMM,0:3:N"
+    ])("move up", param => {
+        const params = param.split(",");
+        const commands = params[0];
+        const position = params[1];
+        expect(rover.execute(commands)).toBe(position);
+    });
 });
