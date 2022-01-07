@@ -2,16 +2,21 @@ import {Coordinate} from "./coordinate";
 import {Direction} from "./direction";
 import {ICoordinate} from "./icoordinate";
 import {IDirection} from "./idirection";
+import {IGrid} from "./igrid";
 import {IMarsRover} from "./imarsRover";
 
 
 export class MarsRover implements IMarsRover {
     private direction: IDirection;
     private coordinate: ICoordinate;
+    private grid: IGrid;
+    // private MAX_HEIGHT: number = 10;
+    // private MAX_WIDTH: number = 10;
 
-    public constructor() {
+    public constructor(grid: IGrid) {
         this.direction = new Direction();
         this.coordinate = new Coordinate(0, 0);
+        this.grid = grid;
     }
 
     public execute(commands: string): string {
@@ -27,21 +32,36 @@ export class MarsRover implements IMarsRover {
             }
 
             if (chr === "M") {
-                this.coordinate = this.move();
+                // this.coordinate = this.move();
+                this.coordinate = this.grid.nextCoordinateFor(this.coordinate, this.direction);
             }
         });
         // return "0:0:" + this.direction.value;
         return `${this.coordinate.x()}:${this.coordinate.y()}:${this.direction.value}`;
     }
 
-    private move(): ICoordinate {
-        let y: number = this.coordinate.y();
-        if (this.direction.value === "N") {
-            y += 1;
-        }
+    // private move(): ICoordinate {
+    //     let y: number = this.coordinate.y();
+    //     let x: number = this.coordinate.x();
+    //     if (this.direction.value === "N") {
+    //         y = (y += 1) % this.MAX_HEIGHT;
+    //     }
 
-        return new Coordinate(this.coordinate.x(), y);
-    }
+    //     if (this.direction.value === "E") {
+    //         x = (x += 1) % this.MAX_WIDTH;
+    //     }
+
+    //     if (this.direction.value === "S") {
+    //         // x = (x === 0) ? 9 : x - 1;
+    //         y = (y > 1) ? y - 1 : this.MAX_HEIGHT - 1;
+    //     }
+
+    //     if (this.direction.value === "W") {
+    //         // x = (x === 0) ? 9 : x - 1;
+    //         x = (x > 1) ? x - 1 : this.MAX_WIDTH - 1;
+    //     }
+    //     return new Coordinate(x, y);
+    // }
 
     // private rotateRight(): string {
     //     if (this.direction === "N") {return "E"}
